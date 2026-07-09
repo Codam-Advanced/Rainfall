@@ -1,28 +1,28 @@
+#define _GNU_SOURCE
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
-	int numb;
-
-	numb = atoi(argv[1]);
-	if (numb == 423)
+	if (atoi(argv[1]) == 423)
 	{
 		char* cmd = strdup("/bin/sh");
-		char*argv[2] = { cmd, NULL };
+		char* execve_input[2] = { cmd, NULL };
 
 		gid_t egid = getegid();
 		uid_t euid = geteuid();
 
-		setegid(egid);
-		seteuid(euid);
+		setresgid(egid, egid, egid);
+		setresuid(euid, euid, euid);
 
-		execve(cmd, argv, NULL);
+		execve("/bin/sh", execve_input, NULL);
 	}
 	else
 	{
-		write(1, "No !\n", 5);
+		fwrite("No !\n", 5, 1, stderr);
 	}
 	return 0;
 }
