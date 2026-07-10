@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	if (atoi(argv[1]) == 423)
 	{
 		char* cmd = strdup("/bin/sh");
-		char* execve_input[2] = { cmd, NULL };
+		char* arguments[2] = { cmd, NULL };
 
 		gid_t egid = getegid();
 		uid_t euid = geteuid();
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 		setresgid(egid, egid, egid);
 		setresuid(euid, euid, euid);
 
-		execve("/bin/sh", execve_input, NULL);
+		execve("/bin/sh", arguments, NULL);
 	}
 	else
 	{
