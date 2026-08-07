@@ -37,6 +37,9 @@ Rainfall is divided into:
 
 Each level contains a vulnerable executable running with elevated privileges. Successfully exploiting the binary reveals the `.pass` file belonging to the next user, whose credentials are then used to continue progressing through the project over **SSH** until every level has been completed.
 
+After starting the project 42 Network updated the subject, providing a brand new virtual machine image.
+The couple of levels we managed to complete before this happened can be found in the `deprecated` directory.
+
 ---
 
 ## 📁 Repository Layout
