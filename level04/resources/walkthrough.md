@@ -1,6 +1,6 @@
-## Level03
+## Level04
 
-`level03` starts off like the usual, a binary, README and a source file:
+`level04` starts off like the usual, a binary, README and a source file:
 
 ```bash
 level04@rainfall:~$ ls
