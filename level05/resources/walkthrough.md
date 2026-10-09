@@ -22,7 +22,7 @@ level05@rainfall:~$ checksec ./wintermute
 	Stripped:   No
 ```
 
-Inspecting the source file, we seem to face a similar problem with `gets`. The issue resembles `level03`, where we used a ROPgadget chain exploit. Since the `NX` bit is also enabled, we can apply the same technique. However, further investigation revealed that the `rdx` register is used in the `run_query` function, whereas we relied on it being null in previous levels. Therefore, we need to find another gadget to set `rdx` to `0` before calling `syscall`.
+Inspecting the source file, we seem to face a similar problem with `gets`. The issue resembles [`level03`](../../level03/resources/walkthrough.md), where we used a ROPgadget chain exploit. Since the `NX` bit is also enabled, we can apply the same technique. However, further investigation revealed that the `rdx` register is used in the `run_query` function, whereas we relied on it being null in previous levels. Therefore, we need to find another gadget to set `rdx` to `0` before calling `syscall`.
 
 ### Gadgets
 
@@ -37,7 +37,7 @@ After further investigation, we found no simple `pop rdx ; ret` gadget, but we d
 ```
 
 ### Payload
-The only thing left is to find the address of the `msg` buffer and update our payload accordingly.
+The only thing left is to find the address of the `query` buffer and update our payload accordingly.
 
 
 ``` bash
@@ -73,7 +73,6 @@ We also need to update our offsets to account for the added gadgets. The remaini
 
 By creating the payload as described and executing it, we successfully obtain a shell and retrieve our flag!
 
-
 ```bash
 cat payload - | $PWD/wintermute 
 
@@ -89,7 +88,3 @@ uid=1006(level05) gid=1008(level05) euid=1022(flag05) groups=1008(level05),1001(
 cat /home/flag05/.pass
 67aaawdq0zcaaf3x57yh6irhvyjv3vs5
 ```
-
-
-
-
